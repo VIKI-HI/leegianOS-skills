@@ -30,6 +30,11 @@ public class TeamspeakTemplate implements ISkillTemplate {
         this.parentSkill = parentSkill;
     }
 
+    @Override
+    public void addResponseParameter(String[] strings) {
+
+    }
+
     public void clientKick() {
         this.setupConnection();
         final Client selectedClient = selectClient();

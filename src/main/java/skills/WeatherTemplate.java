@@ -25,6 +25,11 @@ public class WeatherTemplate implements ISkillTemplate {
         this.parentSkill = parentSkill;
     }
 
+    @Override
+    public void addResponseParameter(String[] strings) {
+
+    }
+
     public void getWeatherCurrent() {
         String location;
         String key;
