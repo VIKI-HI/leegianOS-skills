@@ -7,31 +7,31 @@ import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.linzn.viki.App;
 import de.linzn.viki.internal.ifaces.ISkillTemplate;
 import de.linzn.viki.internal.ifaces.ParentSkill;
-import de.linzn.viki.internal.ifaces.RequestOwner;
+import de.linzn.viki.internal.ifaces.SkillClient;
 import de.linzn.viki.internal.ifaces.SubSkill;
 
 import java.util.Random;
 
 
 public class TeamspeakTemplate implements ISkillTemplate {
-    private RequestOwner requestOwner;
-    private ParentSkill parentSkill;
-    private SubSkill subSkill;
-    private String prefix = this.getClass().getSimpleName() + "->";
     private TS3Api api;
     private TS3Query query;
     private TS3Config config;
 
+    private SkillClient skillClient;
+    private ParentSkill parentSkill;
+    private SubSkill subSkill;
+    private String prefix = this.getClass().getSimpleName() + "->";
 
     @Override
-    public void setEnv(RequestOwner requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
-        this.requestOwner = requestOwner;
+    public void setEnv(SkillClient requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
+        this.skillClient = requestOwner;
         this.subSkill = subSkill;
         this.parentSkill = parentSkill;
     }
 
     @Override
-    public void addResponseParameter(String[] strings) {
+    public void newClientResponse(String[] strings) {
 
     }
 
@@ -41,11 +41,11 @@ public class TeamspeakTemplate implements ISkillTemplate {
 
         if (selectedClient != null) {
             App.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname());
-            this.requestOwner.sendNotification(((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
+            this.skillClient.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
             this.api.kickClientFromServer("Wurde auf Skillanfrage entfernt!", selectedClient);
         } else {
             App.logger(prefix + "clientKick-->" + "no client found");
-            this.requestOwner.sendNotification((String) this.subSkill.serial_data.get("failed"));
+            this.skillClient.sendResponseToClient(true, (String) this.subSkill.serial_data.get("failed"));
         }
         this.closeConnection();
 

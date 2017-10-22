@@ -4,24 +4,24 @@ import de.linzn.cbn.api.ch7466ce.CBNApi;
 import de.linzn.viki.App;
 import de.linzn.viki.internal.ifaces.ISkillTemplate;
 import de.linzn.viki.internal.ifaces.ParentSkill;
-import de.linzn.viki.internal.ifaces.RequestOwner;
+import de.linzn.viki.internal.ifaces.SkillClient;
 import de.linzn.viki.internal.ifaces.SubSkill;
 
 public class NetworkTemplate implements ISkillTemplate {
-    private RequestOwner requestOwner;
+    private SkillClient skillClient;
     private ParentSkill parentSkill;
     private SubSkill subSkill;
     private String prefix = this.getClass().getSimpleName() + "->";
 
     @Override
-    public void setEnv(RequestOwner requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
-        this.requestOwner = requestOwner;
+    public void setEnv(SkillClient requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
+        this.skillClient = requestOwner;
         this.subSkill = subSkill;
         this.parentSkill = parentSkill;
     }
 
     @Override
-    public void addResponseParameter(String[] strings) {
+    public void newClientResponse(String[] strings) {
 
     }
 
