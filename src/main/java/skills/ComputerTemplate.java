@@ -24,11 +24,6 @@ public class ComputerTemplate implements ISkillTemplate {
         this.parentSkill = parentSkill;
     }
 
-    @Override
-    public void newClientResponse(String[] strings) {
-
-    }
-
 
     public boolean startComputer() {
         // Need "apt-get install etherwake" packet installed

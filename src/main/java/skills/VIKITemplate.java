@@ -22,11 +22,6 @@ public class VIKITemplate implements ISkillTemplate {
         this.parentSkill = parentSkill;
     }
 
-    @Override
-    public void newClientResponse(String[] strings) {
-
-    }
-
     public void reboot() {
         try {
             App.logger(prefix + "reboot-->viki ");

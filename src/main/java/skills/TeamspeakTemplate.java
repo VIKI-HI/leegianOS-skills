@@ -30,10 +30,6 @@ public class TeamspeakTemplate implements ISkillTemplate {
         this.parentSkill = parentSkill;
     }
 
-    @Override
-    public void newClientResponse(String[] strings) {
-
-    }
 
     public void clientKick() {
         this.setupConnection();

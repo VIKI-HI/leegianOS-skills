@@ -19,9 +19,4 @@ public class StatusTemplate implements ISkillTemplate {
         this.parentSkill = parentSkill;
     }
 
-    @Override
-    public void newClientResponse(String[] strings) {
-
-    }
-
 }

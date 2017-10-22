@@ -20,10 +20,6 @@ public class NetworkTemplate implements ISkillTemplate {
         this.parentSkill = parentSkill;
     }
 
-    @Override
-    public void newClientResponse(String[] strings) {
-
-    }
 
     public boolean cbnModemRestart() {
         String cbnHost = (String) this.subSkill.serial_data.get("hostName");
