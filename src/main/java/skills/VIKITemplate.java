@@ -24,12 +24,16 @@ public class VIKITemplate implements ISkillTemplate {
 
     public void reboot() {
         this.skillClient.sendResponseToClient(true, "Bist du dir sicher dass ich mich neustarten soll?");
-        String[] test = this.skillClient.waitingSkillForResponse(this, 5);
+        String[] test = this.skillClient.waitingSkillForResponse(this, 20);
 
-        if (test == null || !test[0].equalsIgnoreCase("ja")) {
+        if (test == null) {
+            this.skillClient.sendResponseToClient(true, "Da ich keine Rückmeldung bekommen habe, breche ich dann hier ab!");
+            return;
+        } else if (!test[0].equalsIgnoreCase("ja")) {
             this.skillClient.sendResponseToClient(true, "Ok Vorgang wurde abgebrochen!");
             return;
         }
+
         try {
             App.logger(prefix + "reboot-->viki ");
             this.skillClient.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("begin")));
