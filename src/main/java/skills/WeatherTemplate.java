@@ -1,6 +1,6 @@
 package skills;
 
-import de.linzn.leegianOS.App;
+import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
 import de.linzn.leegianOS.internal.ifaces.ParentSkill;
 import de.linzn.leegianOS.internal.ifaces.SkillClient;
@@ -42,7 +42,7 @@ public class WeatherTemplate implements ISkillTemplate {
             OpenWeatherMap owm = new OpenWeatherMap(key);
             owm.setUnits(OpenWeatherMap.Units.METRIC);
             owm.setLang(OpenWeatherMap.Language.GERMAN);
-            App.logger(prefix + "getWeather-->" + "location " + location);
+            LeegianOSApp.logger(prefix + "getWeather-->" + "location " + location);
             CurrentWeather weatherCurrent = owm.currentWeatherByCityName(location);
             temperature = weatherCurrent.getMainInstance().getTemperature();
             if (weatherCurrent.hasCloudsInstance() && weatherCurrent.getCloudsInstance().hasPercentageOfClouds()) {

@@ -4,7 +4,7 @@ import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import de.linzn.leegianOS.App;
+import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
 import de.linzn.leegianOS.internal.ifaces.ParentSkill;
 import de.linzn.leegianOS.internal.ifaces.SkillClient;
@@ -36,11 +36,11 @@ public class TeamspeakTemplate implements ISkillTemplate {
         final Client selectedClient = selectClient();
 
         if (selectedClient != null) {
-            App.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname());
+            LeegianOSApp.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname());
             this.skillClient.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
             this.api.kickClientFromServer("Wurde auf Skillanfrage entfernt!", selectedClient);
         } else {
-            App.logger(prefix + "clientKick-->" + "no client found");
+            LeegianOSApp.logger(prefix + "clientKick-->" + "no client found");
             this.skillClient.sendResponseToClient(true, (String) this.subSkill.serial_data.get("failed"));
         }
         this.closeConnection();
@@ -49,12 +49,12 @@ public class TeamspeakTemplate implements ISkillTemplate {
 
 
     private Client selectClient() {
-        App.logger(prefix + "selectClient-->" + "select client from array");
+        LeegianOSApp.logger(prefix + "selectClient-->" + "select client from array");
         for (Client client : api.getClients()) {
             if (!client.isServerQueryClient()) {
                 for (String name : this.subSkill.inputArray) {
                     if (client.getNickname().toLowerCase().matches(".*" + name.toLowerCase() + ".*")) {
-                        App.logger(prefix + "selectClient-->" + "found client " + client.getNickname());
+                        LeegianOSApp.logger(prefix + "selectClient-->" + "found client " + client.getNickname());
                         return client;
                     }
                 }
@@ -64,7 +64,7 @@ public class TeamspeakTemplate implements ISkillTemplate {
     }
 
     private void setupConnection() {
-        App.logger(prefix + "setupConnection-->" + "create connection");
+        LeegianOSApp.logger(prefix + "setupConnection-->" + "create connection");
         config = new TS3Config();
         config.setHost((String) this.subSkill.serial_data.get("hostName"));
 
@@ -80,7 +80,7 @@ public class TeamspeakTemplate implements ISkillTemplate {
     }
 
     private void closeConnection() {
-        App.logger(prefix + "closeConnection-->" + "close connection");
+        LeegianOSApp.logger(prefix + "closeConnection-->" + "close connection");
         this.query.exit();
     }
 

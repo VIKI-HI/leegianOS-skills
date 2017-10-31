@@ -1,6 +1,6 @@
 package skills;
 
-import de.linzn.leegianOS.App;
+import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
 import de.linzn.leegianOS.internal.ifaces.ParentSkill;
 import de.linzn.leegianOS.internal.ifaces.SkillClient;
@@ -30,7 +30,7 @@ public class ComputerTemplate implements ISkillTemplate {
         try {
             String pcName = (String) this.subSkill.serial_data.get("systemName");
             String mac = (String) this.subSkill.serial_data.get("macAddress");
-            App.logger(prefix + "startComputer-->systemName " + pcName + " mac " + mac);
+            LeegianOSApp.logger(prefix + "startComputer-->systemName " + pcName + " mac " + mac);
             Runtime.getRuntime().exec("etherwake " + mac).waitFor(1000, TimeUnit.MILLISECONDS);
             return true;
         } catch (IOException | InterruptedException e) {
@@ -48,7 +48,7 @@ public class ComputerTemplate implements ISkillTemplate {
         String user = (String) this.subSkill.serial_data.get("systemUser");
         String password = (String) this.subSkill.serial_data.get("systemPassword");
         try {
-            App.logger(prefix + "restartUnix-->systemName " + systemName + " hostName " + ip);
+            LeegianOSApp.logger(prefix + "restartUnix-->systemName " + systemName + " hostName " + ip);
             Runtime.getRuntime().exec("sshpass -p '" + password + "' ssh " + user + "@" + ip + " -p " + port + " 'reboot'").waitFor(1000, TimeUnit.MILLISECONDS);
             return true;
         } catch (IOException | InterruptedException e) {
@@ -66,7 +66,7 @@ public class ComputerTemplate implements ISkillTemplate {
         String user = (String) this.subSkill.serial_data.get("systemUser");
         String password = (String) this.subSkill.serial_data.get("systemPassword");
         try {
-            App.logger(prefix + "shutdownUnix-->systemName " + systemName + " hostName " + ip);
+            LeegianOSApp.logger(prefix + "shutdownUnix-->systemName " + systemName + " hostName " + ip);
             Runtime.getRuntime().exec("sshpass -p '" + password + "' ssh " + user + "@" + ip + " -p " + port + " 'shutdown -h now'").waitFor(1000, TimeUnit.MILLISECONDS);
             return true;
         } catch (IOException | InterruptedException e) {
@@ -85,7 +85,7 @@ public class ComputerTemplate implements ISkillTemplate {
                     "-c",
                     "sensors | grep -A 0 'id' | cut -c17-21 && sensors | grep -A 0 'Core' | cut -c17-21"
             };
-            App.logger(prefix + "getSystemTemperature-->systemName " + null + " hostName " + null);
+            LeegianOSApp.logger(prefix + "getSystemTemperature-->systemName " + null + " hostName " + null);
             Process p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
             BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));

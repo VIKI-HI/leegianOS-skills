@@ -1,7 +1,7 @@
 package skills;
 
 import de.linzn.cbn.api.ch7466ce.CBNApi;
-import de.linzn.leegianOS.App;
+import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
 import de.linzn.leegianOS.internal.ifaces.ParentSkill;
 import de.linzn.leegianOS.internal.ifaces.SkillClient;
@@ -25,7 +25,7 @@ public class NetworkTemplate implements ISkillTemplate {
         String cbnHost = (String) this.subSkill.serial_data.get("hostName");
         String cbnUsername = (String) this.subSkill.serial_data.get("systemUser");
         String cbnPassword = (String) this.subSkill.serial_data.get("systemPassword");
-        App.logger(prefix + "cbnModemRestart-->hostName " + cbnHost);
+        LeegianOSApp.logger(prefix + "cbnModemRestart-->hostName " + cbnHost);
         CBNApi api = new CBNApi(cbnHost, cbnUsername, cbnPassword);
         try {
             api.restartCBN();

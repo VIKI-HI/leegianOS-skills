@@ -1,6 +1,6 @@
 package skills;
 
-import de.linzn.leegianOS.App;
+import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
 import de.linzn.leegianOS.internal.ifaces.ParentSkill;
 import de.linzn.leegianOS.internal.ifaces.SkillClient;
@@ -35,8 +35,8 @@ public class VIKITemplate implements ISkillTemplate {
         }
 
         try {
-            App.logger(prefix + "reboot-->viki ");
-            for (SkillClient skillClient1 : App.appInstance.skillClientList.values()) {
+            LeegianOSApp.logger(prefix + "reboot-->viki ");
+            for (SkillClient skillClient1 : LeegianOSApp.leegianOSAppInstance.skillClientList.values()) {
                 skillClient1.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("begin")));
             }
             Runtime.getRuntime().exec("service viki restart").waitFor(1000, TimeUnit.MILLISECONDS);
@@ -52,7 +52,7 @@ public class VIKITemplate implements ISkillTemplate {
     public void stop() {
 
         try {
-            App.logger(prefix + "stop-->viki ");
+            LeegianOSApp.logger(prefix + "stop-->viki ");
             Runtime.getRuntime().exec("service viki stop").waitFor(1000, TimeUnit.MILLISECONDS);
 
         } catch (IOException | InterruptedException e) {
