@@ -1,10 +1,10 @@
 package skills;
 
-import de.linzn.viki.App;
-import de.linzn.viki.internal.ifaces.ISkillTemplate;
-import de.linzn.viki.internal.ifaces.ParentSkill;
-import de.linzn.viki.internal.ifaces.SkillClient;
-import de.linzn.viki.internal.ifaces.SubSkill;
+import de.linzn.leegianOS.App;
+import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
+import de.linzn.leegianOS.internal.ifaces.ParentSkill;
+import de.linzn.leegianOS.internal.ifaces.SkillClient;
+import de.linzn.leegianOS.internal.ifaces.SubSkill;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 

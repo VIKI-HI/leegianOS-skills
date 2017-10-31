@@ -1,10 +1,10 @@
 package skills;
 
-import de.linzn.viki.App;
-import de.linzn.viki.internal.ifaces.ISkillTemplate;
-import de.linzn.viki.internal.ifaces.ParentSkill;
-import de.linzn.viki.internal.ifaces.SkillClient;
-import de.linzn.viki.internal.ifaces.SubSkill;
+import de.linzn.leegianOS.App;
+import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
+import de.linzn.leegianOS.internal.ifaces.ParentSkill;
+import de.linzn.leegianOS.internal.ifaces.SkillClient;
+import de.linzn.leegianOS.internal.ifaces.SubSkill;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class ComputerTemplate implements ISkillTemplate {
             String[] cmd = {
                     "/bin/sh",
                     "-c",
-                    "sensors | grep -A 0 'id' | cut -c18-22 && sensors | grep -A 0 'Core' | cut -c18-22"
+                    "sensors | grep -A 0 'id' | cut -c17-21 && sensors | grep -A 0 'Core' | cut -c17-21"
             };
             App.logger(prefix + "getSystemTemperature-->systemName " + null + " hostName " + null);
             Process p = Runtime.getRuntime().exec(cmd);
@@ -98,6 +98,7 @@ public class ComputerTemplate implements ISkillTemplate {
                 i++;
             }
             System.out.println("Core Temp: " + coreTemp.toString());
+            this.skillClient.sendResponseToClient(true, "Die Core Temperature des Systems beträgt " + coreTemp[0] + " °C");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
