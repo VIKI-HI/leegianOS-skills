@@ -37,11 +37,11 @@ public class TeamspeakTemplate implements ISkillTemplate {
 
         if (selectedClient != null) {
             LeegianOSApp.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname());
-            this.skillClient.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
+            this.skillClient.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()), false);
             this.api.kickClientFromServer("Wurde auf Skillanfrage entfernt!", selectedClient);
         } else {
             LeegianOSApp.logger(prefix + "clientKick-->" + "no client found");
-            this.skillClient.sendResponseToClient(true, (String) this.subSkill.serial_data.get("failed"));
+            this.skillClient.sendResponseToClient(true, (String) this.subSkill.serial_data.get("failed"), false);
         }
         this.closeConnection();
 

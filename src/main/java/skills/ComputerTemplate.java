@@ -98,7 +98,7 @@ public class ComputerTemplate implements ISkillTemplate {
                 i++;
             }
             System.out.println("Core Temp: " + coreTemp.toString());
-            this.skillClient.sendResponseToClient(true, "Die Core Temperature des Systems beträgt " + coreTemp[0] + " °C");
+            this.skillClient.sendResponseToClient(true, "Die Core Temperature des Systems beträgt " + coreTemp[0] + " °C", false);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

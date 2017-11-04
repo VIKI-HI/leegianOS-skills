@@ -80,7 +80,7 @@ public class WeatherTemplate implements ISkillTemplate {
         }
 
         String message = "Das Wetter in " + location + " ist " + wetterValue + ". Die Temperatur beträgt " + temperature + " °C.";
-        this.skillClient.sendResponseToClient(true, message);
+        this.skillClient.sendResponseToClient(true, message, false);
 
 
     }

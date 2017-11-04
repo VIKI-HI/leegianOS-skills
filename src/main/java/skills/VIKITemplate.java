@@ -23,28 +23,28 @@ public class VIKITemplate implements ISkillTemplate {
     }
 
     public void reboot() {
-        this.skillClient.sendResponseToClient(true, "Bist du dir sicher dass ich mich neustarten soll?");
+        this.skillClient.sendResponseToClient(true, "Bist du dir sicher dass ich mich neustarten soll?", true);
         String[] test = this.skillClient.waitingSkillForResponse(this, 20);
 
         if (test == null) {
-            this.skillClient.sendResponseToClient(true, "Da ich keine Rückmeldung bekommen habe, breche ich dann hier ab!");
+            this.skillClient.sendResponseToClient(true, "Da ich keine Rückmeldung bekommen habe, breche ich dann hier ab!", false);
             return;
         } else if (!test[0].equalsIgnoreCase("ja")) {
-            this.skillClient.sendResponseToClient(true, "Ok Vorgang wurde abgebrochen!");
+            this.skillClient.sendResponseToClient(true, "Ok Vorgang wurde abgebrochen!", false);
             return;
         }
 
         try {
             LeegianOSApp.logger(prefix + "reboot-->viki ");
             for (SkillClient skillClient1 : LeegianOSApp.leegianOSAppInstance.skillClientList.values()) {
-                skillClient1.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("begin")));
+                skillClient1.sendResponseToClient(true, ((String) this.subSkill.serial_data.get("begin")), false);
             }
             Runtime.getRuntime().exec("service viki restart").waitFor(1000, TimeUnit.MILLISECONDS);
 
         } catch (IOException | InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            this.skillClient.sendResponseToClient(true, (String) this.subSkill.serial_data.get("failed"));
+            this.skillClient.sendResponseToClient(true, (String) this.subSkill.serial_data.get("failed"), false);
             System.err.println();
         }
     }
