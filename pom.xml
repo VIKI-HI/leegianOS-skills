@@ -13,7 +13,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.linzn</groupId>
-    <name>vikiSkills</name>
+    <name>leegianOS-skills</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -31,7 +31,7 @@
         </plugins>
     </build>
     <version>0.0.1</version>
-    <artifactId>vikiSkills</artifactId>
+    <artifactId>leegianOS-skills</artifactId>
     <dependencies>
         <dependency>
             <groupId>de.linzn</groupId>

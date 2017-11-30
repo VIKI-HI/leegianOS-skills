@@ -54,7 +54,7 @@ public class ComputerTemplate implements ISkillTemplate {
     public boolean restartUnix() {
         // Need sshpass installed
         String systemName = (String) this.subSkill.serial_data.get("systemName");
-        String ip = (String) (String) this.subSkill.serial_data.get("hostName");
+        String ip = (String) this.subSkill.serial_data.get("hostName");
         int port = Integer.parseInt((String) this.subSkill.serial_data.get("portNumber"));
         String user = (String) this.subSkill.serial_data.get("systemUser");
         String password = (String) this.subSkill.serial_data.get("systemPassword");
@@ -72,7 +72,7 @@ public class ComputerTemplate implements ISkillTemplate {
     public boolean shutdownUnix() {
         // Need sshpass installed
         String systemName = (String) this.subSkill.serial_data.get("systemName");
-        String ip = (String) (String) this.subSkill.serial_data.get("hostName");
+        String ip = (String) this.subSkill.serial_data.get("hostName");
         int port = Integer.parseInt((String) this.subSkill.serial_data.get("portNumber"));
         String user = (String) this.subSkill.serial_data.get("systemUser");
         String password = (String) this.subSkill.serial_data.get("systemPassword");
@@ -109,7 +109,7 @@ public class ComputerTemplate implements ISkillTemplate {
                 i++;
             }
             System.out.println("Core Temp: " + coreTemp.toString());
-            this.skillClient.sendResponseToClient(true, "Die Core Temperature des Systems beträgt " + coreTemp[0] + " °C", false);
+            this.skillClient.sendResponse(false, "Die Core Temperature des Systems beträgt " + coreTemp[0] + " °C");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
