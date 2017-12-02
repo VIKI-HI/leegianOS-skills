@@ -11,13 +11,13 @@
 
 package skills;
 
-import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
-import de.linzn.leegianOS.internal.ifaces.ParentSkill;
-import de.linzn.leegianOS.internal.ifaces.SkillClient;
-import de.linzn.leegianOS.internal.ifaces.SubSkill;
+import de.linzn.leegianOS.internal.ifaces.ISkill;
+import de.linzn.leegianOS.internal.lifeObjects.ParentSkill;
+import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
+import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
 
 
-public class StatusTemplate implements ISkillTemplate {
+public class StatusTemplate implements ISkill {
     private SkillClient skillClient;
     private ParentSkill parentSkill;
     private SubSkill subSkill;

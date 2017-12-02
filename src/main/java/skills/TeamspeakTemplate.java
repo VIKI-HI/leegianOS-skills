@@ -16,15 +16,15 @@ import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.linzn.leegianOS.LeegianOSApp;
-import de.linzn.leegianOS.internal.ifaces.ISkillTemplate;
-import de.linzn.leegianOS.internal.ifaces.ParentSkill;
-import de.linzn.leegianOS.internal.ifaces.SkillClient;
-import de.linzn.leegianOS.internal.ifaces.SubSkill;
+import de.linzn.leegianOS.internal.ifaces.ISkill;
+import de.linzn.leegianOS.internal.lifeObjects.ParentSkill;
+import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
+import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
 
 import java.util.Random;
 
 
-public class TeamspeakTemplate implements ISkillTemplate {
+public class TeamspeakTemplate implements ISkill {
     private TS3Api api;
     private TS3Query query;
     private TS3Config config;
