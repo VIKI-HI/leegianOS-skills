@@ -18,6 +18,7 @@ import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
 import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -89,9 +90,17 @@ public class WeatherTemplate implements ISkill {
                 wetterValue = "stark bewölkt";
             }
         }
+        JSONObject dataValues = new JSONObject();
+        dataValues.put("needResponse", false);
 
-        String message = "Das Wetter in " + location + " ist " + wetterValue + ". Die Temperatur beträgt " + temperature + " °C.";
-        this.skillClient.sendResponse(false, message);
+        JSONObject textValues = new JSONObject();
+        textValues.put("notificationText", "Das Wetter in " + location + " ist " + wetterValue + ". Die Temperatur beträgt " + temperature + " °C.");
+
+        JSONObject main = new JSONObject();
+        main.put("dataValues", dataValues);
+        main.put("textValues", textValues);
+
+        this.skillClient.sendResponse(main);
 
 
     }

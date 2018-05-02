@@ -11,15 +11,16 @@
 
 package skills;
 
-
-import de.linzn.cbn.api.ch7466ce.CBNApi;
 import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.ifaces.ISkill;
 import de.linzn.leegianOS.internal.lifeObjects.ParentSkill;
 import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
 import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
+import de.linzn.whatsappApi.ValidMessage;
+import de.linzn.whatsappApi.WhatsappClient;
 
-public class NetworkTemplate implements ISkill {
+
+public class WhatsappTemplate implements ISkill {
     private SkillClient skillClient;
     private ParentSkill parentSkill;
     private SubSkill subSkill;
@@ -32,21 +33,10 @@ public class NetworkTemplate implements ISkill {
         this.parentSkill = parentSkill;
     }
 
-
-    public boolean cbnModemRestart() {
-        String cbnHost = (String) this.subSkill.serial_data.get("hostName");
-        String cbnUsername = (String) this.subSkill.serial_data.get("systemUser");
-        String cbnPassword = (String) this.subSkill.serial_data.get("systemPassword");
-        LeegianOSApp.logger(prefix + "cbnModemRestart-->hostName " + cbnHost);
-        CBNApi api = new CBNApi(cbnHost, cbnUsername, cbnPassword);
-        try {
-            api.restartCBN();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public void sendMessage(String localPhone, String passphrase, String phone, String message) {
+        ValidMessage validMessage = new ValidMessage(phone, message);
+        WhatsappClient.sendStandaloneMessage(localPhone, passphrase, validMessage);
+        LeegianOSApp.logger(prefix + "sendPhoneMSG-->" + phone);
     }
-
 
 }

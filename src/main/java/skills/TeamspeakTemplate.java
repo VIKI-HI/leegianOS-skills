@@ -20,6 +20,7 @@ import de.linzn.leegianOS.internal.ifaces.ISkill;
 import de.linzn.leegianOS.internal.lifeObjects.ParentSkill;
 import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
 import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
+import org.json.JSONObject;
 
 import java.util.Random;
 
@@ -45,15 +46,25 @@ public class TeamspeakTemplate implements ISkill {
     public void clientKick() {
         this.setupConnection();
         final Client selectedClient = selectClient();
+        JSONObject dataValues = new JSONObject();
+        dataValues.put("needResponse", false);
+
+        JSONObject textValues = new JSONObject();
+
 
         if (selectedClient != null) {
             LeegianOSApp.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname());
-            this.skillClient.sendResponse(false, ((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
+            textValues.put("notificationText", ((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
             this.api.kickClientFromServer("Wurde auf Skillanfrage entfernt!", selectedClient);
         } else {
             LeegianOSApp.logger(prefix + "clientKick-->" + "no client found");
-            this.skillClient.sendResponse(false, (String) this.subSkill.serial_data.get("failed"));
+            textValues.put("notificationText", this.subSkill.serial_data.get("failed"));
         }
+        JSONObject main = new JSONObject();
+        main.put("dataValues", dataValues);
+        main.put("textValues", textValues);
+
+        this.skillClient.sendResponse(main);
         this.closeConnection();
 
     }

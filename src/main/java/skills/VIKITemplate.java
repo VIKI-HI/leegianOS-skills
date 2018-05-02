@@ -16,6 +16,7 @@ import de.linzn.leegianOS.internal.ifaces.ISkill;
 import de.linzn.leegianOS.internal.lifeObjects.ParentSkill;
 import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
 import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -34,30 +35,60 @@ public class VIKITemplate implements ISkill {
     }
 
     public void reboot() {
-        this.skillClient.sendResponse(true, "Bist du dir sicher dass ich mich neustarten soll?");
+
+        JSONObject dataValues = new JSONObject();
+        dataValues.put("needResponse", true);
+        JSONObject textValues = new JSONObject();
+        textValues.put("notificationText", "Bist du dir sicher dass ich mich neustarten soll?");
+        JSONObject main = new JSONObject();
+        main.put("dataValues", dataValues);
+        main.put("textValues", textValues);
+
+        this.skillClient.sendResponse(main);
         String[] test = this.skillClient.waitingSkillForResponse(this, 20);
 
+
+        dataValues = new JSONObject();
+        dataValues.put("needResponse", false);
+        textValues = new JSONObject();
+
+        main = new JSONObject();
+        main.put("dataValues", dataValues);
+        main.put("textValues", textValues);
+
         if (test == null) {
-            this.skillClient.sendResponse(false, "Da ich keine Rückmeldung bekommen habe, breche ich dann hier ab!");
+            textValues.put("notificationText", "Da ich keine Rückmeldung bekommen habe, breche ich dann hier ab!");
+            this.skillClient.sendResponse(main);
             return;
         } else if (!test[0].equalsIgnoreCase("ja")) {
-            this.skillClient.sendResponse(false, "Ok Vorgang wurde abgebrochen!");
+            textValues.put("notificationText", "Ok Vorgang wurde abgebrochen!");
+            this.skillClient.sendResponse(main);
             return;
         }
 
         try {
+
+            dataValues = new JSONObject();
+            dataValues.put("needResponse", false);
+            textValues = new JSONObject();
+
+            main = new JSONObject();
+            main.put("dataValues", dataValues);
+            main.put("textValues", textValues);
+
             LeegianOSApp.logger(prefix + "reboot-->viki ");
             for (SkillClient skillClient1 : LeegianOSApp.leegianOSAppInstance.skillClientList.values()) {
-                this.skillClient.sendResponse(false, ((String) this.subSkill.serial_data.get("begin")));
+                textValues.put("notificationText", this.subSkill.serial_data.get("begin"));
             }
             Runtime.getRuntime().exec("service viki restart").waitFor(1000, TimeUnit.MILLISECONDS);
 
         } catch (IOException | InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            this.skillClient.sendResponse(false, (String) this.subSkill.serial_data.get("failed"));
+            textValues.put("notificationText", this.subSkill.serial_data.get("failed"));
             System.err.println();
         }
+        this.skillClient.sendResponse(main);
     }
 
     public void stop() {

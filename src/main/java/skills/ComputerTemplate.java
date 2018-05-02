@@ -16,10 +16,14 @@ import de.linzn.leegianOS.internal.ifaces.ISkill;
 import de.linzn.leegianOS.internal.lifeObjects.ParentSkill;
 import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
 import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ComputerTemplate implements ISkill {
@@ -89,30 +93,53 @@ public class ComputerTemplate implements ISkill {
 
 
     public void getSystemTemperature() {
+        List<Float> coreTemp = get_system_temperature((String) this.subSkill.serial_data.get("hostName"));
+
+        JSONObject dataValues = new JSONObject();
+        dataValues.put("needResponse", false);
+
+        JSONObject textValues = new JSONObject();
+        textValues.put("notificationText", "Die Core Temperature des Systems beträgt " + coreTemp.get(0) + " °C");
+
+        JSONArray temperature = new JSONArray();
+        for (float temps : coreTemp) {
+            temperature.put(temps);
+        }
+
+        dataValues.put("needResponse", false);
+        dataValues.put("temperatures", temperature)
+        ;
+        JSONObject main = new JSONObject();
+        main.put("dataValues", dataValues);
+        main.put("textValues", textValues);
+
+        this.skillClient.sendResponse(main);
+    }
+
+    private List<Float> get_system_temperature(String host) {
+        List<Float> temperatures = new ArrayList<>();
         try {
-            Float[] coreTemp = {};
             String[] cmd = {
                     "/bin/sh",
                     "-c",
-                    "sensors | grep -A 0 'id' | cut -c17-21 && sensors | grep -A 0 'Core' | cut -c17-21"
+                    "ssh root@" + host + " -C 'sensors | grep -A 0 'id' | cut -c17-21 && sensors | grep -A 0 'Core' | cut -c17-21'"
             };
-            LeegianOSApp.logger(prefix + "getSystemTemperature-->systemName " + null + " hostName " + null);
             Process p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
             BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = "";
-            int i = 0;
-
+            String line;
             while ((line = b.readLine()) != null) {
-                float temp = Float.parseFloat(line);
-                coreTemp[i] = temp;
-                i++;
+                float temp = getFloat(line);
+                temperatures.add(temp);
             }
-            System.out.println("Core Temp: " + coreTemp.toString());
-            this.skillClient.sendResponse(false, "Die Core Temperature des Systems beträgt " + coreTemp[0] + " °C");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return temperatures;
+    }
+
+    private float getFloat(String line) {
+        return Float.valueOf(line.replaceAll("[^\\d.]", ""));
     }
 
 }
