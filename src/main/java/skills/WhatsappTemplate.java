@@ -11,10 +11,10 @@
 package skills;
 
 import de.linzn.leegianOS.LeegianOSApp;
-import de.linzn.leegianOS.internal.ifaces.ISkill;
-import de.linzn.leegianOS.internal.lifeObjects.ParentSkill;
-import de.linzn.leegianOS.internal.lifeObjects.SkillClient;
-import de.linzn.leegianOS.internal.lifeObjects.SubSkill;
+import de.linzn.leegianOS.internal.interfaces.ISkill;
+import de.linzn.leegianOS.internal.objectDatabase.clients.SkillClient;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.ParentSkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.SubSkill;
 import de.linzn.whatsappApi.ValidMessage;
 import de.linzn.whatsappApi.WhatsappClient;
 
