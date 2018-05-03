@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017. Niklas Linz - All Rights Reserved
+ * Copyright (C) 2018. Niklas Linz - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the LGPLv3 license, which unfortunately won't be
  * written for another century.
  *
  * You should have received a copy of the LGPLv3 license with
  * this file. If not, please write to: niklas.linz@enigmar.de
- *
  */
 
 package skills;
@@ -33,10 +32,15 @@ public class WhatsappTemplate implements ISkill {
         this.parentSkill = parentSkill;
     }
 
-    public void sendMessage(String localPhone, String passphrase, String phone, String message) {
-        ValidMessage validMessage = new ValidMessage(phone, message);
-        WhatsappClient.sendStandaloneMessage(localPhone, passphrase, validMessage);
-        LeegianOSApp.logger(prefix + "sendPhoneMSG-->" + phone);
+    public void sendPhoneMessage() {
+        String loginPhone = (String) this.subSkill.serial_data.get("loginPhone");
+        String loginPassphrase = (String) this.subSkill.serial_data.get("loginPassphrase");
+        String receiverPhone = (String) this.subSkill.serial_data.get("receiverPhone");
+        String message = (String) this.subSkill.serial_data.get("message");
+
+        ValidMessage validMessage = new ValidMessage(receiverPhone, message);
+        WhatsappClient.sendStandaloneMessage(loginPhone, loginPassphrase, validMessage);
+        LeegianOSApp.logger(prefix + "sendPhoneMSG-->" + receiverPhone);
     }
 
 }
