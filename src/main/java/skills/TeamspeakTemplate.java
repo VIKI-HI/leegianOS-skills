@@ -17,8 +17,8 @@ import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.interfaces.ISkill;
 import de.linzn.leegianOS.internal.objectDatabase.clients.SkillClient;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.ParentSkill;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.SubSkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.PrimarySkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.SecondarySkill;
 import org.json.JSONObject;
 
 import java.util.Random;
@@ -30,15 +30,15 @@ public class TeamspeakTemplate implements ISkill {
     private TS3Config config;
 
     private SkillClient skillClient;
-    private ParentSkill parentSkill;
-    private SubSkill subSkill;
+    private PrimarySkill primarySkill;
+    private SecondarySkill secondarySkill;
     private String prefix = this.getClass().getSimpleName() + "->";
 
     @Override
-    public void setEnv(SkillClient requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
+    public void setEnv(SkillClient requestOwner, PrimarySkill primarySkill, SecondarySkill secondarySkill) {
         this.skillClient = requestOwner;
-        this.subSkill = subSkill;
-        this.parentSkill = parentSkill;
+        this.secondarySkill = secondarySkill;
+        this.primarySkill = primarySkill;
     }
 
 
@@ -53,11 +53,11 @@ public class TeamspeakTemplate implements ISkill {
 
         if (selectedClient != null) {
             LeegianOSApp.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname());
-            textValues.put("notificationText", ((String) this.subSkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
+            textValues.put("notificationText", ((String) this.secondarySkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
             this.api.kickClientFromServer("Wurde auf Skillanfrage entfernt!", selectedClient);
         } else {
             LeegianOSApp.logger(prefix + "clientKick-->" + "no client found");
-            textValues.put("notificationText", this.subSkill.serial_data.get("failed"));
+            textValues.put("notificationText", this.secondarySkill.serial_data.get("failed"));
         }
         JSONObject main = new JSONObject();
         main.put("dataValues", dataValues);
@@ -73,7 +73,7 @@ public class TeamspeakTemplate implements ISkill {
         LeegianOSApp.logger(prefix + "selectClient-->" + "select client from array");
         for (Client client : api.getClients()) {
             if (!client.isServerQueryClient()) {
-                for (String name : this.subSkill.inputArray) {
+                for (String name : this.secondarySkill.inputArray) {
                     if (client.getNickname().toLowerCase().matches(".*" + name.toLowerCase() + ".*")) {
                         LeegianOSApp.logger(prefix + "selectClient-->" + "found client " + client.getNickname());
                         return client;
@@ -87,16 +87,16 @@ public class TeamspeakTemplate implements ISkill {
     private void setupConnection() {
         LeegianOSApp.logger(prefix + "setupConnection-->" + "create connection");
         config = new TS3Config();
-        config.setHost((String) this.subSkill.serial_data.get("hostName"));
+        config.setHost((String) this.secondarySkill.serial_data.get("hostName"));
 
         query = new TS3Query(config);
         query.connect();
 
         api = query.getApi();
-        api.login((String) this.subSkill.serial_data.get("systemUser"), (String) this.subSkill.serial_data.get("systemPassword"));
-        api.selectVirtualServerById(Integer.valueOf((String) this.subSkill.serial_data.get("id")));
-        if (!api.setNickname((String) this.subSkill.serial_data.get("systemName"))) {
-            api.setNickname((String) this.subSkill.serial_data.get("systemName") + "-" + (new Random().nextInt(30) + 1));
+        api.login((String) this.secondarySkill.serial_data.get("systemUser"), (String) this.secondarySkill.serial_data.get("systemPassword"));
+        api.selectVirtualServerById(Integer.valueOf((String) this.secondarySkill.serial_data.get("id")));
+        if (!api.setNickname((String) this.secondarySkill.serial_data.get("systemName"))) {
+            api.setNickname((String) this.secondarySkill.serial_data.get("systemName") + "-" + (new Random().nextInt(30) + 1));
         }
     }
 

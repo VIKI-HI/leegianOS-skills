@@ -15,28 +15,28 @@ import de.linzn.cbn.api.ch7466ce.CBNApi;
 import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.interfaces.ISkill;
 import de.linzn.leegianOS.internal.objectDatabase.clients.SkillClient;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.ParentSkill;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.SubSkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.PrimarySkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.SecondarySkill;
 
 
 public class NetworkTemplate implements ISkill {
     private SkillClient skillClient;
-    private ParentSkill parentSkill;
-    private SubSkill subSkill;
+    private PrimarySkill primarySkill;
+    private SecondarySkill secondarySkill;
     private String prefix = this.getClass().getSimpleName() + "->";
 
     @Override
-    public void setEnv(SkillClient requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
+    public void setEnv(SkillClient requestOwner, PrimarySkill primarySkill, SecondarySkill secondarySkill) {
         this.skillClient = requestOwner;
-        this.subSkill = subSkill;
-        this.parentSkill = parentSkill;
+        this.secondarySkill = secondarySkill;
+        this.primarySkill = primarySkill;
     }
 
 
     public boolean cbnModemRestart() {
-        String cbnHost = (String) this.subSkill.serial_data.get("hostName");
-        String cbnUsername = (String) this.subSkill.serial_data.get("systemUser");
-        String cbnPassword = (String) this.subSkill.serial_data.get("systemPassword");
+        String cbnHost = (String) this.secondarySkill.serial_data.get("hostName");
+        String cbnUsername = (String) this.secondarySkill.serial_data.get("systemUser");
+        String cbnPassword = (String) this.secondarySkill.serial_data.get("systemPassword");
         LeegianOSApp.logger(prefix + "cbnModemRestart-->hostName " + cbnHost);
         CBNApi api = new CBNApi(cbnHost, cbnUsername, cbnPassword);
         try {

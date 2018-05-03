@@ -13,8 +13,8 @@ package skills;
 import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.interfaces.ISkill;
 import de.linzn.leegianOS.internal.objectDatabase.clients.SkillClient;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.ParentSkill;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.SubSkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.PrimarySkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.SecondarySkill;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -22,15 +22,15 @@ import java.util.concurrent.TimeUnit;
 
 public class VIKITemplate implements ISkill {
     private SkillClient skillClient;
-    private ParentSkill parentSkill;
-    private SubSkill subSkill;
+    private PrimarySkill primarySkill;
+    private SecondarySkill secondarySkill;
     private String prefix = this.getClass().getSimpleName() + "->";
 
     @Override
-    public void setEnv(SkillClient requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
+    public void setEnv(SkillClient requestOwner, PrimarySkill primarySkill, SecondarySkill secondarySkill) {
         this.skillClient = requestOwner;
-        this.subSkill = subSkill;
-        this.parentSkill = parentSkill;
+        this.secondarySkill = secondarySkill;
+        this.primarySkill = primarySkill;
     }
 
     public void reboot() {
@@ -77,14 +77,14 @@ public class VIKITemplate implements ISkill {
 
             LeegianOSApp.logger(prefix + "reboot-->viki ");
             for (SkillClient skillClient1 : LeegianOSApp.leegianOSAppInstance.skillClientList.values()) {
-                textValues.put("notificationText", this.subSkill.serial_data.get("begin"));
+                textValues.put("notificationText", this.secondarySkill.serial_data.get("begin"));
             }
             Runtime.getRuntime().exec("service viki restart").waitFor(1000, TimeUnit.MILLISECONDS);
 
         } catch (IOException | InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            textValues.put("notificationText", this.subSkill.serial_data.get("failed"));
+            textValues.put("notificationText", this.secondarySkill.serial_data.get("failed"));
             System.err.println();
         }
         this.skillClient.sendResponse(main);

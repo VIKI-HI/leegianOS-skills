@@ -13,8 +13,8 @@ package skills;
 import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.interfaces.ISkill;
 import de.linzn.leegianOS.internal.objectDatabase.clients.SkillClient;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.ParentSkill;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.SubSkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.PrimarySkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.SecondarySkill;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 import org.json.JSONObject;
@@ -24,26 +24,26 @@ import java.io.IOException;
 
 public class WeatherTemplate implements ISkill {
     private SkillClient skillClient;
-    private ParentSkill parentSkill;
-    private SubSkill subSkill;
+    private PrimarySkill primarySkill;
+    private SecondarySkill secondarySkill;
     private String prefix = this.getClass().getSimpleName() + "->";
 
     @Override
-    public void setEnv(SkillClient requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
+    public void setEnv(SkillClient requestOwner, PrimarySkill primarySkill, SecondarySkill secondarySkill) {
         this.skillClient = requestOwner;
-        this.subSkill = subSkill;
-        this.parentSkill = parentSkill;
+        this.secondarySkill = secondarySkill;
+        this.primarySkill = primarySkill;
     }
 
     public void getWeatherCurrent() {
         String location;
         String key;
-        if (this.parentSkill != null) {
-            location = (String) this.parentSkill.serial_data.get("location");
-            key = (String) this.parentSkill.serial_data.get("weatherKey");
+        if (this.primarySkill != null) {
+            location = (String) this.primarySkill.serial_data.get("location");
+            key = (String) this.primarySkill.serial_data.get("weatherKey");
         } else {
-            location = (String) this.subSkill.serial_data.get("location");
-            key = (String) this.subSkill.serial_data.get("weatherKey");
+            location = (String) this.secondarySkill.serial_data.get("location");
+            key = (String) this.secondarySkill.serial_data.get("weatherKey");
         }
         float temperature = 0;
         float clouds = 0;

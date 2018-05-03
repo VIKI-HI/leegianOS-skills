@@ -13,8 +13,8 @@ package skills;
 import de.linzn.leegianOS.LeegianOSApp;
 import de.linzn.leegianOS.internal.interfaces.ISkill;
 import de.linzn.leegianOS.internal.objectDatabase.clients.SkillClient;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.ParentSkill;
-import de.linzn.leegianOS.internal.objectDatabase.skillType.SubSkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.PrimarySkill;
+import de.linzn.leegianOS.internal.objectDatabase.skillType.SecondarySkill;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,23 +27,23 @@ import java.util.concurrent.TimeUnit;
 
 public class ComputerTemplate implements ISkill {
     private SkillClient skillClient;
-    private ParentSkill parentSkill;
-    private SubSkill subSkill;
+    private PrimarySkill primarySkill;
+    private SecondarySkill secondarySkill;
     private String prefix = this.getClass().getSimpleName() + "->";
 
     @Override
-    public void setEnv(SkillClient requestOwner, ParentSkill parentSkill, SubSkill subSkill) {
+    public void setEnv(SkillClient requestOwner, PrimarySkill primarySkill, SecondarySkill secondarySkill) {
         this.skillClient = requestOwner;
-        this.subSkill = subSkill;
-        this.parentSkill = parentSkill;
+        this.secondarySkill = secondarySkill;
+        this.primarySkill = primarySkill;
     }
 
 
     public boolean startComputer() {
         // Need "apt-get install etherwake" packet installed
         try {
-            String pcName = (String) this.subSkill.serial_data.get("systemName");
-            String mac = (String) this.subSkill.serial_data.get("macAddress");
+            String pcName = (String) this.secondarySkill.serial_data.get("systemName");
+            String mac = (String) this.secondarySkill.serial_data.get("macAddress");
             LeegianOSApp.logger(prefix + "startComputer-->systemName " + pcName + " mac " + mac);
             Runtime.getRuntime().exec("etherwake " + mac).waitFor(1000, TimeUnit.MILLISECONDS);
             return true;
@@ -56,11 +56,11 @@ public class ComputerTemplate implements ISkill {
 
     public boolean restartUnix() {
         // Need sshpass installed
-        String systemName = (String) this.subSkill.serial_data.get("systemName");
-        String ip = (String) this.subSkill.serial_data.get("hostName");
-        int port = Integer.parseInt((String) this.subSkill.serial_data.get("portNumber"));
-        String user = (String) this.subSkill.serial_data.get("systemUser");
-        String password = (String) this.subSkill.serial_data.get("systemPassword");
+        String systemName = (String) this.secondarySkill.serial_data.get("systemName");
+        String ip = (String) this.secondarySkill.serial_data.get("hostName");
+        int port = Integer.parseInt((String) this.secondarySkill.serial_data.get("portNumber"));
+        String user = (String) this.secondarySkill.serial_data.get("systemUser");
+        String password = (String) this.secondarySkill.serial_data.get("systemPassword");
         try {
             LeegianOSApp.logger(prefix + "restartUnix-->systemName " + systemName + " hostName " + ip);
             Runtime.getRuntime().exec("sshpass -p '" + password + "' ssh " + user + "@" + ip + " -p " + port + " 'reboot'").waitFor(1000, TimeUnit.MILLISECONDS);
@@ -74,11 +74,11 @@ public class ComputerTemplate implements ISkill {
 
     public boolean shutdownUnix() {
         // Need sshpass installed
-        String systemName = (String) this.subSkill.serial_data.get("systemName");
-        String ip = (String) this.subSkill.serial_data.get("hostName");
-        int port = Integer.parseInt((String) this.subSkill.serial_data.get("portNumber"));
-        String user = (String) this.subSkill.serial_data.get("systemUser");
-        String password = (String) this.subSkill.serial_data.get("systemPassword");
+        String systemName = (String) this.secondarySkill.serial_data.get("systemName");
+        String ip = (String) this.secondarySkill.serial_data.get("hostName");
+        int port = Integer.parseInt((String) this.secondarySkill.serial_data.get("portNumber"));
+        String user = (String) this.secondarySkill.serial_data.get("systemUser");
+        String password = (String) this.secondarySkill.serial_data.get("systemPassword");
         try {
             LeegianOSApp.logger(prefix + "shutdownUnix-->systemName " + systemName + " hostName " + ip);
             Runtime.getRuntime().exec("sshpass -p '" + password + "' ssh " + user + "@" + ip + " -p " + port + " 'shutdown -h now'").waitFor(1000, TimeUnit.MILLISECONDS);
@@ -92,7 +92,7 @@ public class ComputerTemplate implements ISkill {
 
 
     public void getSystemTemperature() {
-        List<Float> coreTemp = get_system_temperature((String) this.subSkill.serial_data.get("hostName"));
+        List<Float> coreTemp = get_system_temperature((String) this.secondarySkill.serial_data.get("hostName"));
 
         JSONObject dataValues = new JSONObject();
         dataValues.put("needResponse", false);
