@@ -15,11 +15,10 @@ import de.linzn.leegianOS.internal.interfaces.ISkill;
 import de.linzn.leegianOS.internal.objectDatabase.clients.SkillClient;
 import de.linzn.leegianOS.internal.objectDatabase.skillType.PrimarySkill;
 import de.linzn.leegianOS.internal.objectDatabase.skillType.SecondarySkill;
-import net.aksingh.owmjapis.CurrentWeather;
-import net.aksingh.owmjapis.OpenWeatherMap;
+import net.aksingh.owmjapis.api.APIException;
+import net.aksingh.owmjapis.core.OWM;
+import net.aksingh.owmjapis.model.CurrentWeather;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 
 public class WeatherTemplate implements ISkill {
@@ -45,55 +44,57 @@ public class WeatherTemplate implements ISkill {
             location = (String) this.secondarySkill.serial_data.get("location");
             key = (String) this.secondarySkill.serial_data.get("weatherKey");
         }
-        float temperature = 0;
-        float clouds = 0;
-        float rain = 0;
+        /* Day weather*/
+        double tempMin = -1;
+        double tempMax = -1;
+        double tempCurrent = -1;
+        double snowData = -1;
+        double rainData = -1;
+        double cloudData = -1;
 
         try {
-            OpenWeatherMap owm = new OpenWeatherMap(key);
-            owm.setUnits(OpenWeatherMap.Units.METRIC);
-            owm.setLang(OpenWeatherMap.Language.GERMAN);
+            OWM owm = new OWM(key);
+            owm.setUnit(OWM.Unit.METRIC);
+            owm.setLanguage(OWM.Language.GERMAN);
+
             LeegianOSApp.logger(prefix + "getWeather-->" + "location " + location);
-            CurrentWeather weatherCurrent = owm.currentWeatherByCityName(location);
-            temperature = weatherCurrent.getMainInstance().getTemperature();
-            if (weatherCurrent.hasCloudsInstance() && weatherCurrent.getCloudsInstance().hasPercentageOfClouds()) {
-                clouds = weatherCurrent.getCloudsInstance().getPercentageOfClouds();
+            CurrentWeather crWeather = owm.currentWeatherByCityName(location);
+
+            if (crWeather.hasRespCode() && crWeather.getRespCode() == 200) {
+                if (crWeather.hasMainData() && crWeather.getMainData() != null) {
+                    if (crWeather.getMainData().hasTempMin()) {
+                        tempMin = crWeather.getMainData().getTempMin();
+                    }
+                    if (crWeather.getMainData().hasTempMax()) {
+                        tempMax = crWeather.getMainData().getTempMax();
+                    }
+                    if (crWeather.getMainData().hasTemp()) {
+                        tempCurrent = crWeather.getMainData().getTemp();
+                    }
+                }
+
+                if (crWeather.getSnowData() != null && crWeather.hasSnowData() && crWeather.getSnowData().hasSnowVol3h()) {
+                    snowData = crWeather.getSnowData().getSnowVol3h();
+                }
+
+                if (crWeather.getRainData() != null && crWeather.hasRainData() && crWeather.getRainData().hasPrecipVol3h()) {
+                    rainData = crWeather.getRainData().getPrecipVol3h();
+                }
+
+                if (crWeather.getCloudData() != null && crWeather.hasCloudData() && crWeather.getCloudData().hasCloud()) {
+                    cloudData = crWeather.getCloudData().getCloud();
+                }
             }
-            if (weatherCurrent.hasRainInstance() && weatherCurrent.getRainInstance().hasRain()) {
-                rain = weatherCurrent.getRainInstance().getRain();
-            }
-        } catch (IOException e) {
+        } catch (APIException e) {
             e.printStackTrace();
         }
-        String wetterValue = "N.A";
-        System.out.println("Cloud: " + clouds);
-        System.out.println("Rain: " + rain);
-        if (rain > 0) {
-            if (clouds < 20) {
-                wetterValue = "regnerrich";
-            } else if (clouds < 50) {
-                wetterValue = "leicht bewölkt mit Regen";
-            } else if (clouds < 70) {
-                wetterValue = "bewölkt mit Regen";
-            } else if (clouds <= 100) {
-                wetterValue = "start bewölkt mit Regen";
-            }
-        } else {
-            if (clouds < 20) {
-                wetterValue = "sonnig";
-            } else if (clouds < 50) {
-                wetterValue = "leicht bewölkt";
-            } else if (clouds < 70) {
-                wetterValue = "bewölkt";
-            } else if (clouds <= 100) {
-                wetterValue = "stark bewölkt";
-            }
-        }
+
         JSONObject dataValues = new JSONObject();
         dataValues.put("needResponse", false);
 
         JSONObject textValues = new JSONObject();
-        textValues.put("notificationText", "Das Wetter in " + location + " ist " + wetterValue + ". Die Temperatur beträgt " + temperature + " °C.");
+        //textValues.put("notificationText", "Das Wetter in " + location + " ist " + wetterValue + ". Die Temperatur beträgt " + temperature + " °C.");
+        textValues.put("notificationText", "Data-> T:" + tempCurrent + " miT:" + tempMin + " maT:" + tempMax + " SN:" + snowData + " RA:" + rainData + " CL: " + cloudData);
 
         JSONObject main = new JSONObject();
         main.put("dataValues", dataValues);

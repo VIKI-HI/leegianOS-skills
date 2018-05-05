@@ -92,11 +92,13 @@ public class ComputerTemplate implements ISkill {
 
 
     public void getSystemTemperature() {
-        List<Float> coreTemp = get_system_temperature((String) this.secondarySkill.serial_data.get("hostName"));
+        int port = 22;
+        if (this.secondarySkill.serial_data.containsKey("port")) {
+            port = (int) this.secondarySkill.serial_data.get("port");
+        }
+        List<Float> coreTemp = get_system_temperature((String) this.secondarySkill.serial_data.get("hostName"), port);
 
         JSONObject dataValues = new JSONObject();
-        dataValues.put("needResponse", false);
-
         JSONObject textValues = new JSONObject();
         textValues.put("notificationText", "Die Core Temperature des Systems beträgt " + coreTemp.get(0) + " °C");
 
@@ -106,8 +108,7 @@ public class ComputerTemplate implements ISkill {
         }
 
         dataValues.put("needResponse", false);
-        dataValues.put("temperatures", temperature)
-        ;
+        dataValues.put("temperatures", temperature);
         JSONObject main = new JSONObject();
         main.put("dataValues", dataValues);
         main.put("textValues", textValues);
@@ -115,13 +116,13 @@ public class ComputerTemplate implements ISkill {
         this.skillClient.sendResponse(main);
     }
 
-    private List<Float> get_system_temperature(String host) {
+    private List<Float> get_system_temperature(String host, int port) {
         List<Float> temperatures = new ArrayList<>();
         try {
             String[] cmd = {
                     "/bin/sh",
                     "-c",
-                    "ssh root@" + host + " -C 'sensors | grep -A 0 'id' | cut -c17-21 && sensors | grep -A 0 'Core' | cut -c17-21'"
+                    "ssh root@" + host + " -p " + port + " -C 'sensors | grep -A 0 'id' | cut -c17-21 && sensors | grep -A 0 'Core' | cut -c17-21'"
             };
             Process p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
