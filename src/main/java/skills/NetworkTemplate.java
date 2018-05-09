@@ -37,7 +37,7 @@ public class NetworkTemplate implements ISkill {
         String cbnHost = (String) this.secondarySkill.serial_data.get("hostName");
         String cbnUsername = (String) this.secondarySkill.serial_data.get("systemUser");
         String cbnPassword = (String) this.secondarySkill.serial_data.get("systemPassword");
-        LeegianOSApp.logger(prefix + "cbnModemRestart-->hostName " + cbnHost);
+        LeegianOSApp.logger(prefix + "cbnModemRestart-->hostName " + cbnHost, true);
         CBNApi api = new CBNApi(cbnHost, cbnUsername, cbnPassword);
         try {
             api.restartCBN();

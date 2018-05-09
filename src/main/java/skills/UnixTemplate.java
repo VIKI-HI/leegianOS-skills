@@ -58,6 +58,7 @@ public class UnixTemplate implements ISkill {
         dataValues.put("needResponse", false);
         dataValues.put("exitCode", exitCode);
         dataValues.put("hostname", hostName);
+        dataValues.put("port", port);
 
         JSONObject textValues = new JSONObject();
         textValues.put("notificationText", "Beendet mit ExitCode " + exitCode);

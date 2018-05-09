@@ -52,11 +52,11 @@ public class TeamspeakTemplate implements ISkill {
 
 
         if (selectedClient != null) {
-            LeegianOSApp.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname());
+            LeegianOSApp.logger(prefix + "clientKick-->" + "kick client " + selectedClient.getNickname(), true);
             textValues.put("notificationText", ((String) this.secondarySkill.serial_data.get("success")).replace("${name}", selectedClient.getNickname()));
             this.api.kickClientFromServer("Wurde auf Skillanfrage entfernt!", selectedClient);
         } else {
-            LeegianOSApp.logger(prefix + "clientKick-->" + "no client found");
+            LeegianOSApp.logger(prefix + "clientKick-->" + "no client found", true);
             textValues.put("notificationText", this.secondarySkill.serial_data.get("failed"));
         }
         JSONObject main = new JSONObject();
@@ -70,12 +70,12 @@ public class TeamspeakTemplate implements ISkill {
 
 
     private Client selectClient() {
-        LeegianOSApp.logger(prefix + "selectClient-->" + "select client from array");
+        LeegianOSApp.logger(prefix + "selectClient-->" + "select client from array", true);
         for (Client client : api.getClients()) {
             if (!client.isServerQueryClient()) {
                 for (String name : this.secondarySkill.inputArray) {
                     if (client.getNickname().toLowerCase().matches(".*" + name.toLowerCase() + ".*")) {
-                        LeegianOSApp.logger(prefix + "selectClient-->" + "found client " + client.getNickname());
+                        LeegianOSApp.logger(prefix + "selectClient-->" + "found client " + client.getNickname(), true);
                         return client;
                     }
                 }
@@ -85,7 +85,7 @@ public class TeamspeakTemplate implements ISkill {
     }
 
     private void setupConnection() {
-        LeegianOSApp.logger(prefix + "setupConnection-->" + "create connection");
+        LeegianOSApp.logger(prefix + "setupConnection-->" + "create connection", true);
         config = new TS3Config();
         config.setHost((String) this.secondarySkill.serial_data.get("hostName"));
 
@@ -101,7 +101,7 @@ public class TeamspeakTemplate implements ISkill {
     }
 
     private void closeConnection() {
-        LeegianOSApp.logger(prefix + "closeConnection-->" + "close connection");
+        LeegianOSApp.logger(prefix + "closeConnection-->" + "close connection", true);
         this.query.exit();
     }
 

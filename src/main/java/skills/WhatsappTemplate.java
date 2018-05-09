@@ -40,7 +40,7 @@ public class WhatsappTemplate implements ISkill {
 
         ValidMessage validMessage = new ValidMessage(receiverPhone, message);
         WhatsappClient.sendStandaloneMessage(loginPhone, loginPassphrase, validMessage);
-        LeegianOSApp.logger(prefix + "sendPhoneMSG-->" + receiverPhone);
+        LeegianOSApp.logger(prefix + "sendPhoneMSG-->" + receiverPhone, true);
     }
 
 }

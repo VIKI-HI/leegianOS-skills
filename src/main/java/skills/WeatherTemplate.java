@@ -57,7 +57,7 @@ public class WeatherTemplate implements ISkill {
             owm.setUnit(OWM.Unit.METRIC);
             owm.setLanguage(OWM.Language.GERMAN);
 
-            LeegianOSApp.logger(prefix + "getWeather-->" + "location " + location);
+            LeegianOSApp.logger(prefix + "getWeather-->" + "location " + location, true);
             CurrentWeather crWeather = owm.currentWeatherByCityName(location);
 
             if (crWeather.hasRespCode() && crWeather.getRespCode() == 200) {

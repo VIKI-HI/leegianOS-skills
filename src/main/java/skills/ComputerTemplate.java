@@ -44,7 +44,7 @@ public class ComputerTemplate implements ISkill {
         try {
             String pcName = (String) this.secondarySkill.serial_data.get("systemName");
             String mac = (String) this.secondarySkill.serial_data.get("macAddress");
-            LeegianOSApp.logger(prefix + "startComputer-->systemName " + pcName + " mac " + mac);
+            LeegianOSApp.logger(prefix + "startComputer-->systemName " + pcName + " mac " + mac, true);
             Runtime.getRuntime().exec("etherwake " + mac).waitFor(1000, TimeUnit.MILLISECONDS);
             return true;
         } catch (IOException | InterruptedException e) {
@@ -62,7 +62,7 @@ public class ComputerTemplate implements ISkill {
         String user = (String) this.secondarySkill.serial_data.get("systemUser");
         String password = (String) this.secondarySkill.serial_data.get("systemPassword");
         try {
-            LeegianOSApp.logger(prefix + "restartUnix-->systemName " + systemName + " hostName " + ip);
+            LeegianOSApp.logger(prefix + "restartUnix-->systemName " + systemName + " hostName " + ip, true);
             Runtime.getRuntime().exec("sshpass -p '" + password + "' ssh " + user + "@" + ip + " -p " + port + " 'reboot'").waitFor(1000, TimeUnit.MILLISECONDS);
             return true;
         } catch (IOException | InterruptedException e) {
@@ -80,7 +80,7 @@ public class ComputerTemplate implements ISkill {
         String user = (String) this.secondarySkill.serial_data.get("systemUser");
         String password = (String) this.secondarySkill.serial_data.get("systemPassword");
         try {
-            LeegianOSApp.logger(prefix + "shutdownUnix-->systemName " + systemName + " hostName " + ip);
+            LeegianOSApp.logger(prefix + "shutdownUnix-->systemName " + systemName + " hostName " + ip, true);
             Runtime.getRuntime().exec("sshpass -p '" + password + "' ssh " + user + "@" + ip + " -p " + port + " 'shutdown -h now'").waitFor(1000, TimeUnit.MILLISECONDS);
             return true;
         } catch (IOException | InterruptedException e) {

@@ -75,7 +75,7 @@ public class VIKITemplate implements ISkill {
             main.put("dataValues", dataValues);
             main.put("textValues", textValues);
 
-            LeegianOSApp.logger(prefix + "reboot-->viki ");
+            LeegianOSApp.logger(prefix + "reboot-->viki ", true);
             for (SkillClient skillClient1 : LeegianOSApp.leegianOSAppInstance.skillClientList.values()) {
                 textValues.put("notificationText", this.secondarySkill.serial_data.get("begin"));
             }
@@ -93,7 +93,7 @@ public class VIKITemplate implements ISkill {
     public void stop() {
 
         try {
-            LeegianOSApp.logger(prefix + "stop-->viki ");
+            LeegianOSApp.logger(prefix + "stop-->viki ", true);
             Runtime.getRuntime().exec("service viki stop").waitFor(1000, TimeUnit.MILLISECONDS);
 
         } catch (IOException | InterruptedException e) {
